@@ -10,7 +10,7 @@
 
 """This module exports the Codeclimate plugin class."""
 
-from SublimeLinter.lint import Linter, util, persist
+from SublimeLinter.lint import Linter, util
 
 
 class Codeclimate(Linter):
@@ -51,5 +51,4 @@ class Codeclimate(Linter):
         if relative_file_name == None:
             return result
         result.append(relative_file_name)
-        # persist.debug(result)
         return result
