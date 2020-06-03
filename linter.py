@@ -10,48 +10,45 @@
 
 """This module exports the Codeclimate plugin class."""
 
-from SublimeLinter.lint import Linter, util, persist
+from SublimeLinter.lint import Linter, util
 
 
 class Codeclimate(Linter):
     """Provides an interface to codeclimate."""
 
-    syntax = (
-        'ruby on rails',
-        'ruby',
-        'javascript',
-        'python',
-        'go',
-        'html',
-        'css',
-        'markdown',
-        'php',
-        'haskall',
-        'java',
-        'shellscript'
-    )
-    executable = "codeclimate"
+    defaults = {
+        'chdir': "${project}",
+        'executable': 'codeclimate',
+        'selector': (
+            'source.css, '
+            'source.go, '
+            'source.haskall, '
+            'source.java, '
+            'source.javascript, '
+            'source.js, '
+            'source.php, '
+            'source.python, '
+            'source.ruby, '
+            'source.scss, '
+            'source.shell, '
+            'text.html'
+        )
+    }
     regex = r'^(?P<line>\d+)(?:-\d+)?:\s(?P<message>.+)$'
     multiline = False
     line_col_base = (1, 1)
     tempfile_suffix = '-'
     error_stream = util.STREAM_BOTH
-    selectors = {}
     word_re = None
-    defaults = {
-        'chdir': "${project}"
-    }
-    inline_settings = None
-    inline_overrides = None
-    comment_re = None
 
     def cmd(self):
         """Construct a cmd to provide a relative path to 'codeclimate analyze'."""
-        result = [self.executable_path, 'analyze']
+        result = ['codeclimate', 'analyze', '-e', 'structure', '-e', 'duplication']
         relative_file_name = None
         for folder in self.view.window().folders():
             if self.filename.find(folder) == 0:
                 relative_file_name = self.filename.replace(folder + '/', '')
+        if relative_file_name == None:
+            return result
         result.append(relative_file_name)
-        persist.debug(result)
         return result
