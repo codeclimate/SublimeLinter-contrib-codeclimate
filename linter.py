@@ -51,5 +51,5 @@ class Codeclimate(Linter):
         if relative_file_name == None:
             return result
         result.append(relative_file_name)
-        persist.debug(result)
+        # persist.debug(result)
         return result
